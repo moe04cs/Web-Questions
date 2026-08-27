@@ -1,0 +1,2731 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Web Development Quiz</title>
+    <style>
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #74ebd5 0%, #9face6 100%);
+        margin: 0;
+        padding: 40px 20px;
+        color: #333;
+        min-height: 100vh;
+      }
+      .quiz-container {
+        max-width: 800px;
+        margin: 0 auto;
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 16px;
+        padding: 30px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(10px);
+      }
+      h1 {
+        text-align: center;
+        color: #2c3e50;
+      }
+      .question-block {
+        margin-bottom: 30px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid #e0e0e0;
+      }
+      .question-text {
+        font-size: 1.2rem;
+        font-weight: bold;
+        margin-bottom: 15px;
+        white-space: pre-wrap;
+      }
+      .options-container {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .option-btn {
+        padding: 12px 20px;
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        background: #fff;
+        cursor: pointer;
+        font-size: 1rem;
+        text-align: left;
+        transition: all 0.2s ease;
+      }
+      .option-btn:hover {
+        background: #f8f9fa;
+        border-color: #bdc3c7;
+      }
+      .option-btn:disabled {
+        cursor: not-allowed;
+      }
+      .correct {
+        background-color: #d4edda !important;
+        border-color: #28a745 !important;
+        color: #155724;
+      }
+      .wrong {
+        background-color: #f8d7da !important;
+        border-color: #dc3545 !important;
+        color: #721c24;
+      }
+      .feedback {
+        margin-top: 10px;
+        font-weight: bold;
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="quiz-container">
+      <h1>Web Development Practice Quiz</h1>
+      <div id="quiz-content"></div>
+    </div>
+
+    <script>
+      const quizData = [
+        {
+          id: 1,
+          question: "1- WWW stands for:",
+          options: [
+            "A. World Web Window",
+            "B. Wide World Web",
+            "C. World Wide Web",
+            "D. Web World Wide",
+          ],
+          correctAnswerIndex: 2,
+        },
+        {
+          id: 2,
+          question: "2- The main purpose of W3C is to:",
+          options: [
+            "A. Sell domain names",
+            "B. Set standards for the World Wide Web",
+            "C. Host websites",
+            "D. Create browsers",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 3,
+          question:
+            "3- Communication between client and server takes place using:",
+          options: ["A. HTTP", "B. CSS", "C. HTML", "D. SQL"],
+          correctAnswerIndex: 0,
+        },
+        {
+          id: 4,
+          question: "4- HTML stands for:",
+          options: [
+            "A. Hyper Transfer Markup Language",
+            "B. Hypertext Markup Language",
+            "C. High Text Machine Language",
+            "D. Hyperlink Text Management Language",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 6,
+          question: "6- The <head> element mainly contains:",
+          options: [
+            "A. Visible page content",
+            "B. Metadata and document information",
+            "C. Images only",
+            "D. Tables only",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 7,
+          question:
+            "7- Which is the correct HTML comment syntax according to the material?",
+          options: [
+            "A. // comment",
+            "B. /* comment */",
+            "C. <!-- comment -->",
+            "D. ## comment",
+          ],
+          correctAnswerIndex: 2,
+        },
+        {
+          id: 8,
+          question: "8- Which is a normal closed HTML element?",
+          options: [
+            "A. <p>Hello</p>",
+            "B. <p/>Hello",
+            "C. <br>Hello<br>",
+            "D. <img>Hello</img>",
+          ],
+          correctAnswerIndex: 0,
+        },
+        {
+          id: 10,
+          question: '10- In <p align="center">Hello</p>, align is:',
+          options: [
+            "A. A tag",
+            "B. A value",
+            "C. An attribute",
+            "D. A selector",
+          ],
+          correctAnswerIndex: 2,
+        },
+        {
+          id: 11,
+          question: "11- Which tag highlights text?",
+          options: ["A. <mark>", "B. <highlight>", "C. <h1>", "D. <stronger>"],
+          correctAnswerIndex: 0,
+        },
+        {
+          id: 12,
+          question: "12- Which tag makes text smaller?",
+          options: ["A. <tiny>", "B. <small>", "C. <mini>", "D. <sub>"],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 13,
+          question:
+            "13- Which pair is used to represent italic text in the notes?",
+          options: [
+            "A. <i> and <em>",
+            "B. <italic> and <slant>",
+            "C. <it> and <emphasis>",
+            "D. <slant> and <i>",
+          ],
+          correctAnswerIndex: 0,
+        },
+        {
+          id: 14,
+          question: "14- Which pair is associated with bold text?",
+          options: [
+            "A. <b> and <strong>",
+            "B. <bold> and <heavy>",
+            "C. <strong> and <heavy>",
+            "D. <b> and <bold>",
+          ],
+          correctAnswerIndex: 0,
+        },
+        {
+          id: 15,
+          question: "15- Which tag underlines text?",
+          options: ["A. <under>", "B. <u>", "C. <line>", "D. <ul>"],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 16,
+          question: "16- Which tag creates superscript?",
+          options: ["A. <sup>", "B. <super>", "C. <up>", "D. <top>"],
+          correctAnswerIndex: 0,
+        },
+        {
+          id: 17,
+          question: "17- Which tag creates subscript?",
+          options: ["A. <down>", "B. <sub>", "C. <bottom>", "D. <script>"],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 18,
+          question: "18- Which element preserves spaces and line breaks?",
+          options: ["A. <p>", "B. <pre>", "C. <space>", "D. <keep>"],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 19,
+          question: "19- Which list is used when order matters?",
+          options: ["A. <ul>", "B. <dl>", "C. <ol>", "D. <li>"],
+          correctAnswerIndex: 2,
+        },
+        {
+          id: 20,
+          question: "20- Which list is used when order does not matter?",
+          options: ["A. <ol>", "B. <ul>", "C. <dl>", "D. <dt>"],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 21,
+          question: "21- Which element represents an individual list item?",
+          options: ["A. <item>", "B. <li>", "C. <list>", "D. <it>"],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 22,
+          question:
+            "22- Which list is designed for terms and their descriptions?",
+          options: [
+            "A. Ordered list",
+            "B. Unordered list",
+            "C. Description list",
+            "D. Numbered list",
+          ],
+          correctAnswerIndex: 2,
+        },
+        {
+          id: 23,
+          question: "23- Which tag defines a description list?",
+          options: ["A. <dd>", "B. <dt>", "C. <dl>", "D. <desc>"],
+          correctAnswerIndex: 2,
+        },
+        {
+          id: 27,
+          question: '27- What does <ol type="A"> produce?',
+          options: [
+            "A. Lowercase letters",
+            "B. Uppercase letters",
+            "C. Uppercase Roman numerals",
+            "D. Numbers",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 28,
+          question: '28- What does <ol type="a"> produce?',
+          options: [
+            "A. Lowercase letters",
+            "B. Uppercase letters",
+            "C. Lowercase Roman numerals",
+            "D. Numbers",
+          ],
+          correctAnswerIndex: 0,
+        },
+        {
+          id: 29,
+          question: '29- What does <ol type="1"> produce?',
+          options: [
+            "A. Lowercase Roman numerals",
+            "B. Uppercase Roman numerals",
+            "C. Lowercase letters",
+            "D. Numbers",
+          ],
+          correctAnswerIndex: 3,
+        },
+        {
+          id: 30,
+          question: '30- What does <ol type="i"> produce?',
+          options: [
+            "A. Lowercase Roman numerals",
+            "B. Uppercase Roman numerals",
+            "C. Numbers",
+            "D. Lowercase letters",
+          ],
+          correctAnswerIndex: 0,
+        },
+        {
+          id: 31,
+          question: '31- What does <ol type="a" start="5"> begin with?',
+          options: ["A. A", "B. D", "C. E", "D. F"],
+          correctAnswerIndex: 2,
+        },
+        {
+          id: 32,
+          question: '32- What does <ol type="i" start="5"> begin with?',
+          options: ["A. iii", "B. iv", "C. v", "D. vi"],
+          correctAnswerIndex: 2,
+        },
+        {
+          id: 33,
+          question: "33- A list placed inside another list is called:",
+          options: [
+            "A. Linked list",
+            "B. Nested list",
+            "C. Layered table",
+            "D. Embedded list",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 34,
+          question: "34- Which CSS property controls unordered list markers?",
+          options: [
+            "A. list-marker",
+            "B. list-style-type",
+            "C. marker-style",
+            "D. ul-type",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 35,
+          question: "35- Which value gives a filled circular bullet?",
+          options: ["A. square", "B. circle", "C. disc", "D. round"],
+          correctAnswerIndex: 2,
+        },
+        {
+          id: 36,
+          question: "36- Which value gives an empty circular marker?",
+          options: ["A. circle", "B. disc", "C. round", "D. ring"],
+          correctAnswerIndex: 0,
+        },
+        {
+          id: 37,
+          question: "37- Which correctly represents a character entity form?",
+          options: [
+            "A. #entity;",
+            "B. &entity name;",
+            "C. \\$entity;",
+            "D. %entity%",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 38,
+          question: "38- &nbsp; is used for:",
+          options: [
+            "A. A new line",
+            "B. A non-breaking space",
+            "C. A tab",
+            "D. A paragraph",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 39,
+          question: "39- &lt; represents:",
+          options: ["A. >", "B. <", "C. &", 'D. "'],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 40,
+          question: "40- &gt; represents:",
+          options: ["A. <", "B. >", "C. &", "D. '"],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 41,
+          question: "41- &amp; represents:",
+          options: ["A. @", "B. &", "C. %", "D. #"],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 42,
+          question: "42- CSS stands for:",
+          options: [
+            "A. Computer Style Sheets",
+            "B. Cascading Style Sheets",
+            "C. Creative Style Syntax",
+            "D. Colorful Style Sheets",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 43,
+          question: "43- CSS primarily controls:",
+          options: [
+            "A. Database operations",
+            "B. The visual presentation of web pages",
+            "C. Server memory",
+            "D. HTML file storage",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 44,
+          question: "44- Which is NOT a CSS method listed in the material?",
+          options: [
+            "A. Inline",
+            "B. Internal",
+            "C. External",
+            "D. Embedded SQL",
+          ],
+          correctAnswerIndex: 3,
+        },
+        {
+          id: 45,
+          question: "45- Inline CSS is written using:",
+          options: ["A. class", "B. style", "C. css", "D. format"],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 46,
+          question: "46- Internal CSS is normally placed inside:",
+          options: [
+            "A. <body> only",
+            "B. <style> inside <head>",
+            "C. <css>",
+            "D. <script>",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 47,
+          question: "47- External CSS is linked using:",
+          options: [
+            "A. <css>",
+            "B. <link>",
+            'C. <style src="">',
+            'D. <script href="">',
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 48,
+          question: "48- Which is the correct external stylesheet link?",
+          options: [
+            'A. <css href="styles.css">',
+            'B. <link rel="stylesheet" href="styles.css">',
+            'C. <style src="styles.css">',
+            'D. <script rel="stylesheet" src="styles.css">',
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 49,
+          question: "49- In color: red;, color is:",
+          options: ["A. Selector", "B. Property", "C. Value", "D. Ruleset"],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 50,
+          question: "50- In color: red;, red is:",
+          options: [
+            "A. Property",
+            "B. Selector",
+            "C. Value",
+            "D. Declaration block",
+          ],
+          correctAnswerIndex: 2,
+        },
+        {
+          id: 51,
+          question: "51. color: red; as a whole is:",
+          options: [
+            "A. A selector",
+            "B. A declaration",
+            "C. A ruleset",
+            "D. A stylesheet",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 52,
+          question: "52. Which selector styles all <ul> elements?",
+          options: ["A. .ul", "B. #ul", "C. ul", "D. *ul"],
+          correctAnswerIndex: 2,
+        },
+        {
+          id: 53,
+          question: "53. Which symbol identifies a class selector?",
+          options: ["A. #", "B. .", "C. @", "D. :"],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 54,
+          question: "54. Which symbol identifies an ID selector?",
+          options: ["A. .", "B. #", "C. *", "D. &"],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 55,
+          question:
+            "55. Which selector applies to every element with class box?",
+          options: ["A. #box", "B. .box", "C. box", "D. \\$box"],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 56,
+          question:
+            "56. Which selector applies to an element whose ID is container?",
+          options: [
+            "A. .container",
+            "B. container",
+            "C. #container",
+            "D. @container",
+          ],
+          correctAnswerIndex: 2,
+        },
+        {
+          id: 57,
+          question:
+            '57. Which element(s) are matched by .box?\n<p class="box">A</p>\n<div class="box">B</div>\n<p id="box">C</p>',
+          options: ["A. A only", "B. B only", "C. A and B", "D. A and B and C"],
+          correctAnswerIndex: 2,
+        },
+        {
+          id: 58,
+          question:
+            '58. Which elements are matched by #main?\n<div id="main">A</div>\n<p class="main">B</p>',
+          options: ["A. Both", "B. A only", "C. B only", "D. Neither"],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 59,
+          question:
+            "59. Which selector matches all three headings?\nh1 { color: green; }\nh2 { color: green; }\nh3 { color: green; }",
+          options: [
+            "A. h1+h2+h3",
+            "B. h1, h2, h3",
+            "C. h1 h2 h3",
+            "D. h1 h2 > h3",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 60,
+          question: "60. which has higher priority in a conflict?",
+          options: [
+            "A. Inline style",
+            "B. Class selector",
+            "C. Element selector",
+            "D. External stylesheet automatically",
+          ],
+          correctAnswerIndex: 0,
+        },
+        {
+          id: 61,
+          question:
+            '61. Suppose:\n<h1 style="color:red">Hello</h1>\nand CSS says:\nh1 { color: blue; }\nWhat color is applied to h1?',
+          options: ["A. Blue", "B. Red", "C. Purple", "D. Depends on browser"],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 62,
+          question:
+            '62. Consider:\n<style>\nh1 { color:pink; }\n#x { color:green; }\n.box { color: blue; }\n</style>\n<h1 id="x">BAU</h1>\nWhat color is h1?',
+          options: ["A. Pink", "B. Blue", "C. Green", "D. Black"],
+          correctAnswerIndex: 2,
+        },
+        {
+          id: 64,
+          question: "64. Which property sets the background color?",
+          options: [
+            "A. color-background",
+            "B. background-color",
+            "C. bgcolor-css",
+            "D. background only",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 65,
+          question: "65. Which property specifies a background image?",
+          options: [
+            "A. image-background",
+            "B. background-image",
+            "C. bg-image-url",
+            "D. background-src",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 66,
+          question:
+            "66. Which property controls whether a background image repeats?",
+          options: [
+            "A. image-repeat",
+            "B. repeat-image",
+            "C. background-repeat",
+            "D. bg-repeat-style",
+          ],
+          correctAnswerIndex: 2,
+        },
+        {
+          id: 67,
+          question: "67. Which value prevents background repetition?",
+          options: ["A. none", "B. no-repeat", "C. stop", "D. one"],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 68,
+          question: "68. Which property controls text direction?",
+          options: [
+            "A. text-direction",
+            "B. direction",
+            "C. writing-direction",
+            "D. dir",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 69,
+          question: "69. Which property controls horizontal text alignment?",
+          options: [
+            "A. align-text",
+            "B. text-align",
+            "C. horizontal-align",
+            "D. text-position",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 70,
+          question: "70. Which property controls the space between characters?",
+          options: [
+            "A. word-spacing",
+            "B. character-spacing",
+            "C. letter-spacing",
+            "D. text-spacing",
+          ],
+          correctAnswerIndex: 2,
+        },
+        {
+          id: 71,
+          question: "71. Which property controls the space between words?",
+          options: [
+            "A. word-spacing",
+            "B. letter-spacing",
+            "C. text-spacing",
+            "D. font-spacing",
+          ],
+          correctAnswerIndex: 0,
+        },
+        {
+          id: 72,
+          question: "72. Which property controls capitalization?",
+          options: [
+            "A. text-transform",
+            "B. font-transform",
+            "C. text-case",
+            "D. case-transform",
+          ],
+          correctAnswerIndex: 0,
+        },
+        {
+          id: 73,
+          question: "73. Which value makes text uppercase?",
+          options: ["A. upper", "B. uppercase", "C. capital", "D. all-upper"],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 74,
+          question: "74. Which property adds a shadow to text?",
+          options: [
+            "A. font-shadow",
+            "B. text-shadow",
+            "C. shadow-text",
+            "D. text-decoration-shadow",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 75,
+          question:
+            "75. In:\ntext-shadow: 2px 5px 3px red;\nthe first required value represents:",
+          options: [
+            "A. Vertical shadow",
+            "B. Horizontal shadow",
+            "C. Blur",
+            "D. Font size",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 76,
+          question: "76. Can negative values be used for text-shadow offsets?",
+          options: ["A. No", "B. Yes", "C. Only for blur", "D. Only in HSL"],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 77,
+          question: "77. Which property specifies font family?",
+          options: [
+            "A. font-name",
+            "B. font-family",
+            "C. font-type",
+            "D. typeface",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 78,
+          question: "78. Which property makes text italic?",
+          options: [
+            "A. font-weight",
+            "B. font-style",
+            "C. font-family",
+            "D. text-style",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 79,
+          question: "79. Which property controls thickness of characters?",
+          options: [
+            "A. font-weight",
+            "B. font-thickness",
+            "C. text-weight",
+            "D. font-style",
+          ],
+          correctAnswerIndex: 0,
+        },
+        {
+          id: 80,
+          question: "80. normal text defaults to approximately:",
+          options: ["A. 10px", "B. 12px", "C. 16px", "D. 20px"],
+          correctAnswerIndex: 2,
+        },
+        {
+          id: 81,
+          question: "81. Which shorthand property sets border properties?",
+          options: [
+            "A. border-all",
+            "B. border",
+            "C. border-style-all",
+            "D. outline",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 82,
+          question: "82. Which property controls border style?",
+          options: [
+            "A. border-style",
+            "B. border-type",
+            "C. border-design",
+            "D. style-border",
+          ],
+          correctAnswerIndex: 0,
+        },
+        {
+          id: 83,
+          question: "83. Which is a valid border style?",
+          options: ["A. solid", "B. filled", "C. painted", "D. straight"],
+          correctAnswerIndex: 0,
+        },
+        {
+          id: 84,
+          question: "84. Which is NOT listed as a border style?",
+          options: [
+            "A. dotted",
+            "B. dashed",
+            "C. solid",
+            "D. transparent-border",
+          ],
+          correctAnswerIndex: 3,
+        },
+        {
+          id: 85,
+          question: "85. Padding is the space:",
+          options: [
+            "A. Outside the border",
+            "B. Between border and content",
+            "C. Between elements",
+            "D. Around the page",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 86,
+          question: "86. Margin is the space:",
+          options: [
+            "A. Between content and border",
+            "B. Outside the element",
+            "C. Inside text",
+            "D. Inside an image",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 87,
+          question: "87. Can negative padding values be used?",
+          options: [
+            "A. Yes",
+            "B. No",
+            "C. Only on images",
+            "D. Only on tables",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 88,
+          question:
+            "88. Can negative margin values be used according to the notes?",
+          options: [
+            "A. No",
+            "B. Yes",
+            "C. Only with auto",
+            "D. Only with percentages",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 89,
+          question: "89. What does this mean?\npadding: 25px 50px 75px 100px;",
+          options: [
+            "A. Top 25, right 50, bottom 75, left 100",
+            "B. Top 100, right 75, bottom 50, left 25",
+            "C. Top 25, bottom 50, left 75, right 100",
+            "D. All sides 25",
+          ],
+          correctAnswerIndex: 0,
+        },
+        {
+          id: 90,
+          question: "90. What does this mean?\nmargin: 25px;",
+          options: [
+            "A. Top only",
+            "B. Horizontal only",
+            "C. All four margins are 25px",
+            "D. Left and right only",
+          ],
+          correctAnswerIndex: 2,
+        },
+        {
+          id: 91,
+          question: "91. What does this mean?\npadding: 25px;",
+          options: [
+            "A. All four padding values are 25px",
+            "B. Top only",
+            "C. Left and right only",
+            "D. Bottom only",
+          ],
+          correctAnswerIndex: 0,
+        },
+        {
+          id: 92,
+          question: "92. Which tag creates a hyperlink?",
+          options: ["A. <link>", "B. <a>", "C. <href>", "D. <url>"],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 93,
+          question:
+            "93. Which attribute specifies the destination of a hyperlink?",
+          options: ["A. src", "B. target", "C. href", "D. path"],
+          correctAnswerIndex: 2,
+        },
+        {
+          id: 94,
+          question: '94. What does target="_blank" do?',
+          options: [
+            "A. Opens in same tab",
+            "B. Opens in a new window/tab",
+            "C. Opens inside an iframe automatically",
+            "D. Opens the page source",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 95,
+          question: '95. What does target="_self" do?',
+          options: [
+            "A. Opens in a new tab",
+            "B. Opens in the same window/tab",
+            "C. Opens in a frame named self",
+            "D. Opens in another browser",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 96,
+          question:
+            '96. Consider:\n<h2 id="C4">Chapter 4</h2>\n<a href="#C4">Jump to Chapter 4</a>\nClicking the link will:',
+          options: [
+            "A. Open another website",
+            "B. Jump to the element with ID C4",
+            "C. Reload the page",
+            "D. Open a file named C4",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 97,
+          question:
+            "97. Which tag embeds another document inside the current page?",
+          options: [
+            "A. <frame>",
+            "B. <iframe>",
+            "C. <embed-page>",
+            "D. <window>",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 98,
+          question:
+            "98. Which iframe attribute specifies the embedded document's address?",
+          options: ["A. href", "B. src", "C. path", "D. url"],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 99,
+          question: "99. Which tag is used to insert an image?",
+          options: ["A. <picture>", "B. <img>", "C. <image>", "D. <src>"],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 100,
+          question: "100. Which image attribute specifies the image source?",
+          options: ["A. href", "B. src", "C. source", "D. path"],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 102,
+          question: "102. Which attribute provides alternate text?",
+          options: ["A. description", "B. alt", "C. alternate", "D. text"],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 103,
+          question:
+            "103. If an image cannot be displayed, what may the browser show?",
+          options: [
+            "A. The URL automatically",
+            "B. The alt text",
+            "C. The CSS selector",
+            "D. The filename only",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 104,
+          question: "104. Which attribute controls image width?",
+          options: [
+            "A. size-width",
+            "B. width",
+            "C. img-width",
+            "D. horizontal",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 105,
+          question:
+            "105. Which is a valid way to set image dimensions using inline CSS?",
+          options: [
+            'A. style="width: 304px;height: 228px;"',
+            'B. css="width: 304;height:228"',
+            'C. dimension="304x228"',
+            'D. size="304,228"',
+          ],
+          correctAnswerIndex: 0,
+        },
+        {
+          id: 106,
+          question:
+            "106. If the image is in a subfolder called images, which is correct?",
+          options: [
+            'A. src="/images/picture.jpg" always means same folder',
+            'B. src="images/picture.jpg"',
+            'C. src="../images/picture.jpg"',
+            'D. src="picture/images.jpg"',
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 107,
+          question:
+            "107. If the image is one folder before the current page and then in images, which is correct?",
+          options: [
+            "A. images/picture.jpg",
+            "B. /images/picture.jpg",
+            "C. ../images/picture.jpg",
+            "D. ../../images/picture.jpg",
+          ],
+          correctAnswerIndex: 2,
+        },
+        {
+          id: 108,
+          question:
+            "108. Consider this structure:\nc:/bau\n☐\nindex.html\nlogo.gif\nfaculty\nimg\nfaculty.html\nlogo.png\nWhat should index.html use to load logo.png?",
+          options: [
+            "A. logo.png",
+            "B. img/logo.png",
+            "C. ../img/logo.png",
+            "D. /faculty/logo.png",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 109,
+          question:
+            "109. From faculty/faculty.html, how can you reference logo.gif located in the root bau folder?",
+          options: [
+            "A. logo.gif",
+            "B. faculty/logo.gif",
+            "C. /logo.gif",
+            "D. ../logo.gif",
+          ],
+          correctAnswerIndex: 3,
+        },
+        {
+          id: 110,
+          question: "110. Which tag defines a table?",
+          options: ["A. <tab>", "B. <table>", "C. <tbl>", "D. <data>"],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 111,
+          question: "111. Which tag defines a row?",
+          options: ["A. <row>", "B. <tr>", "C. <td>", "D. <th>"],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 112,
+          question: "112. Which tag defines a normal table cell?",
+          options: ["A. <tc>", "B. <td>", "C. <cell>", "D. <data>"],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 113,
+          question: "113. Which tag defines a header cell?",
+          options: ["A. <thead>", "B. <header-cell>", "C. <th>", "D. <hdr>"],
+          correctAnswerIndex: 2,
+        },
+        {
+          id: 114,
+          question: "114. Table headers are by default:",
+          options: [
+            "A. Red and left-aligned",
+            "B. Bold and centered",
+            "C. Italic and right-aligned",
+            "D. Underlined and justified",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 115,
+          question: "115. Which tag defines a table caption?",
+          options: [
+            "A. <title>",
+            "B. <caption>",
+            "C. <label>",
+            "D. <table-title>",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 116,
+          question: "116. <thead> groups:",
+          options: [
+            "A. Table footer",
+            "B. Table header content",
+            "C. Table cells only",
+            "D. Caption content",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 117,
+          question: "117. <tbody> groups:",
+          options: ["A. Header", "B. Body content", "C. Footer", "D. Caption"],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 118,
+          question: "118. <tfoot> groups:",
+          options: [
+            "A. Table footer content",
+            "B. Table header content",
+            "C. Table rows only",
+            "D. CSS",
+          ],
+          correctAnswerIndex: 0,
+        },
+        {
+          id: 119,
+          question: "119. Which attribute merges cells vertically across rows?",
+          options: ["A. colspan", "B. rowspan", "C. rows", "D. merge-row"],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 120,
+          question:
+            "120. Which attribute merges cells horizontally across columns?",
+          options: [
+            "A. rowspan",
+            "B. colspan",
+            "C. columnspan",
+            "D. merge-col",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 121,
+          question:
+            '121. Consider:\n<td rowspan="2">\\$50</td>\nThis cell occupies:',
+          options: [
+            "A. Two columns",
+            "B. Two rows",
+            "C. Two tables",
+            "D. Two pages",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 122,
+          question:
+            '122. Consider:\n<td colspan="2">Sum</td>\nThis cell occupies:',
+          options: [
+            "A. Two rows",
+            "B. Two columns",
+            "C. Two tables",
+            "D. Two headers",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 123,
+          question: "123. Which property collapses table borders?",
+          options: [
+            "A. border-collapse",
+            "B. collapse-border",
+            "C. table-collapse",
+            "D. border-join",
+          ],
+          correctAnswerIndex: 0,
+        },
+        {
+          id: 124,
+          question:
+            "124. In a table:\ntd {\ncolor: blue;\n}\nWhat does color affect?",
+          options: [
+            "A. Cell border",
+            "B. Text color",
+            "C. Background image",
+            "D. Cell width",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 125,
+          question: "125. In:\nth {\nbackground-color: blue;\n}\nWhat is blue?",
+          options: [
+            "A. Header text",
+            "B. Header cell background",
+            "C. Border",
+            "D. Page background",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 126,
+          question: "126. HTML forms are mainly used to:",
+          options: [
+            "A. Style text",
+            "B. Collect user input",
+            "C. Create servers",
+            "D. Define CSS rules",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 127,
+          question: "127. Which tag defines a form?",
+          options: ["A. <input>", "B. <form>", "C. <collect>", "D. <data>"],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 128,
+          question: "128. What does the action attribute specify?",
+          options: [
+            "A. CSS file",
+            "B. Backend script/destination for submitted data",
+            "C. Input type",
+            "D. Browser color",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 129,
+          question: "129. If action is omitted:",
+          options: [
+            "A. The form cannot submit",
+            "B. The action is the current page",
+            "C. The action becomes Google",
+            "D. POST is disabled",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 130,
+          question: "130. What is the default form method?",
+          options: ["A. POST", "B. GET", "C. PUT", "D. DELETE"],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 131,
+          question: "131. What happens to GET form data?",
+          options: [
+            "A. It is shown in the address field",
+            "B. It is hidden from the URL",
+            "C. It is never sent",
+            "D. It is automatically encrypted",
+          ],
+          correctAnswerIndex: 0,
+        },
+        {
+          id: 132,
+          question: "132. Which is better for sensitive data?",
+          options: ["A. GET", "B. POST", "C. FTP", "D. HTML"],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 133,
+          question: "133. According to the course material, POST:",
+          options: [
+            "A. Displays submitted form data in the URL",
+            "B. Does not display submitted data in the URL",
+            "C. Cannot send large amounts of data",
+            "D. Is only used for search boxes",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 134,
+          question:
+            "134. Which form attribute controls where the response is displayed?",
+          options: ["A. action", "B. target", "C. destination", "D. window"],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 135,
+          question:
+            "135. Which input type creates a normal single-line text box?",
+          options: ["A. text", "B. string", "C. textbox", "D. input-text"],
+          correctAnswerIndex: 0,
+        },
+        {
+          id: 136,
+          question: "136. Which input type masks typed characters?",
+          options: ["A. secure", "B. hidden", "C. password", "D. private"],
+          correctAnswerIndex: 2,
+        },
+        {
+          id: 137,
+          question: "137. Which element is used for multi-line text input?",
+          options: [
+            'A. <input type="multiline">',
+            "B. <textarea>",
+            "C. <text>",
+            "D. <multiline>",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 138,
+          question:
+            "138. Which attribute of <input> is sent to the server as the control's identifying key?",
+          options: ["A. id", "B. name", "C. label", "D. key"],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 139,
+          question:
+            "139. Which attribute supplies an initial value in a text box?",
+          options: ["A. default", "B. value", "C. start", "D. initial"],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 140,
+          question:
+            "140. Which attribute limits the number of characters entered into a text input?",
+          options: ["A. size", "B. maxlength", "C. limit", "D. charmax"],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 141,
+          question: "141. size on a text input mainly controls:",
+          options: [
+            "A. Maximum characters",
+            "B. Width of the input in characters",
+            "C. Height in pixels",
+            "D. Font size",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 142,
+          question: "142. Checkboxes are appropriate when:",
+          options: [
+            "A. Exactly one choice must be made",
+            "B. More than one option may be selected",
+            "C. No options are available",
+            "D. Passwords are required",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 143,
+          question: "143. Radio buttons are appropriate when:",
+          options: [
+            "A. Many options must be selected",
+            "B. One option from a group should be selected",
+            "C. Files are uploaded",
+            "D. Text spans many lines",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 144,
+          question: "144. What makes radio buttons belong to the same group?",
+          options: [
+            "A. Same value",
+            "B. Same name",
+            "C. Same id necessarily",
+            "D. Same class necessarily",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 145,
+          question:
+            "145. Which attribute preselects a checkbox or radio button?",
+          options: ["A. chosen", "B. selected", "C. checked", "D. active"],
+          correctAnswerIndex: 2,
+        },
+        {
+          id: 146,
+          question:
+            "146. If a checkbox has no value the default submitted value is:",
+          options: ["A. null", "B. false", "C. on", "D. checked"],
+          correctAnswerIndex: 2,
+        },
+        {
+          id: 147,
+          question: "147. Which element creates a drop-down list?",
+          options: [
+            "A. <dropdown>",
+            "B. <select>",
+            "C. <listbox>",
+            "D. <menu>",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 148,
+          question: "148. Which element defines an option within <select>?",
+          options: [
+            "A. <choice>",
+            "B. <option>",
+            "C. <item>",
+            "D. <select-item>",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 149,
+          question: "149. Which attribute selects an option initially?",
+          options: ["A. checked", "B. selected", "C. chosen", "D. defaulted"],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 150,
+          question: "150. If <select multiple> is present:",
+          options: [
+            "A. User can select multiple options",
+            "B. Only one option may be selected",
+            "C. All options are disabled",
+            "D. The select disappears",
+          ],
+          correctAnswerIndex: 0,
+        },
+        {
+          id: 151,
+          question: "151. The accept attribute on a file input specifies:",
+          options: [
+            "A. File name",
+            "B. File types the server accepts",
+            "C. Maximum file size only",
+            "D. Password",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 152,
+          question: "152. Which accepts images generally?",
+          options: [
+            'A. accept="img/*"',
+            'B. accept="image/*"',
+            'C. accept="images"',
+            'D. accept="picture/*"',
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 153,
+          question: "153. Which input type allows file selection?",
+          options: ["A. upload", "B. attachment", "C. file", "D. binary"],
+          correctAnswerIndex: 2,
+        },
+        {
+          id: 154,
+          question: "154. Which input type submits a form?",
+          options: [
+            "A. submit",
+            "B. send-form",
+            "C. post",
+            "D. form-submit-only",
+          ],
+          correctAnswerIndex: 0,
+        },
+        {
+          id: 155,
+          question:
+            "155. Which input type resets form controls to initial values?",
+          options: ["A. clear", "B. reset", "C. reload", "D. restore-form"],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 156,
+          question: '156. What does <input type="hidden"> do?',
+          options: [
+            "A. Encrypts data",
+            "B. Hides the control from the visible page while allowing its value to be submitted",
+            "C. Deletes the input",
+            "D. Makes the input disabled",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 157,
+          question: "157. Which element groups controls within a form?",
+          options: [
+            "A. <group>",
+            "B. <fieldset>",
+            "C. <formgroup>",
+            "D. <section>",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 158,
+          question: "158. Which element gives a caption to a fieldset?",
+          options: ["A. <caption>", "B. <legend>", "C. <label>", "D. <title>"],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 159,
+          question:
+            "159. Which element provides a caption/label for a form control?",
+          options: ["A. <caption>", "B. <label>", "C. <legend>", "D. <text>"],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 160,
+          question:
+            "160. What is one benefit of <label> mentioned in the notes?",
+          options: [
+            "A. It encrypts the form",
+            "B. It provides a bigger clickable area",
+            "C. It uploads files",
+            "D. It creates a database",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 161,
+          question:
+            "161. Validation performed in the browser before submission is:",
+          options: [
+            "A. Server-side validation",
+            "B. Client-side validation",
+            "C. Database validation",
+            "D. Network validation",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 162,
+          question: "162. Which is more customizable according to the notes?",
+          options: [
+            "A. Built-in HTML validation",
+            "B. JavaScript validation",
+            "C. CSS validation",
+            "D. GET validation",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 163,
+          question: "163. Server-side validation occurs:",
+          options: [
+            "A. Before the browser receives the page",
+            "B. After data is submitted to the server",
+            "C. Before the user types",
+            "D. Inside CSS",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 164,
+          question: "164. What does required mean?",
+          options: [
+            "A. Optional",
+            "B. Field must be filled",
+            "C. Field is hidden",
+            "D. Field must be numeric",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 165,
+          question: "165. Which input type is suitable for email input?",
+          options: ["A. mailbox", "B. email", "C. e-mail-box", "D. address"],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 166,
+          question:
+            '166. What does a browser potentially do with an <input type="email">?',
+          options: [
+            "A. Automatically style it red",
+            "B. Validate email formatting when submitted",
+            "C. Convert it to a password field",
+            "D. Hide it",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 167,
+          question:
+            '167. Consider:\n<input type="number" min="1" max="5">\nWhich value is intended to be allowed by the stated restrictions?',
+          options: ["A. 0", "B. 3", "C. 6", "D. -2"],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 168,
+          question: '168. What does step="10" indicate for a number input?',
+          options: [
+            "A. Increase/decrease by increments of 10",
+            "B. Minimum must be 10",
+            "C. Maximum must be 10",
+            "D. Ten digits only",
+          ],
+          correctAnswerIndex: 0,
+        },
+        {
+          id: 169,
+          question:
+            '169. What color does the paragraph become?\n<style>\np { color:red; }\n.box { color:blue; }\n</style>\n<p class="box">Hello</p>',
+          options: ["A. Red", "B. Blue", "C. Purple", "D. Black"],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 170,
+          question:
+            '170. What color does this element become?\n<style>\np { color:red; }\n#x { color:green; }\n.box { color: blue; }\n</style>\n<p id="x" class="box">Hello</p>',
+          options: [
+            "A. Red",
+            "B. Blue",
+            "C. Green",
+            "D. Depends on class being first",
+          ],
+          correctAnswerIndex: 2,
+        },
+        {
+          id: 171,
+          question:
+            '171. What color wins?\n<style>\np { color:red; }\n.box { color: blue; }\n</style>\n<p class="box" style="color:black">Hello</p>',
+          options: ["A. Red", "B. Blue", "C. Black", "D. Browser default"],
+          correctAnswerIndex: 2,
+        },
+        {
+          id: 172,
+          question:
+            '172. What happens here?\n<ul style="list-style-type: none">\n<li>A</li>\n<li>B</li>\n</ul>',
+          options: [
+            "A. Square markers",
+            "B. Circular markers",
+            "C. No list markers",
+            "D. Roman numerals",
+          ],
+          correctAnswerIndex: 2,
+        },
+        {
+          id: 173,
+          question:
+            '173. What does this produce?\n<ol type="A" start="3">\n<li>HTML</li>\n<li>CSS</li>\n<li>PHP</li>\n</ol>',
+          options: ["A. A, B, C", "B. 1, 2, 3", "C. C, D, E", "D. I, II, III"],
+          correctAnswerIndex: 2,
+        },
+        {
+          id: 174,
+          question:
+            '174. What does this produce?\n<ol type="i" start="3">\n<li>A</li>\n<li>B</li>\n<li>C</li>\n</ol>',
+          options: [
+            "A. i, ii, iii",
+            "B. iii, iv, v",
+            "C. c, d, e",
+            "D. 3, 4, 5",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 175,
+          question:
+            '175. Which items are styled?\n<style>\n.box {\ncolor:red;\n}\n</style>\n<p class="box">One</p>\n<p class="box other">Two</p>\n<div class="other">Three</div>',
+          options: [
+            "A. One only",
+            "B. Two only",
+            "C. One and Two",
+            "D. All three",
+          ],
+          correctAnswerIndex: 2,
+        },
+        {
+          id: 176,
+          question:
+            "176. What happens to this paragraph?\n<p>\nHello\nWorld\nCSS\n</p>",
+          options: [
+            "A. All spaces and line breaks are preserved",
+            "B. Normal HTML paragraph formatting collapses extra spaces/lines",
+            "C. It becomes a <pre>",
+            "D. It produces three paragraphs",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 177,
+          question:
+            '177. Consider:\n<style>\nh1 {\ncolor:red;\n}\n.box {\ncolor:blue;\n}\n</style>\n<h1 class="box">Hello</h1>\nWhat color?',
+          options: ["A. Red", "B. Blue", "C. Both simultaneously", "D. Black"],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 178,
+          question:
+            '178. Consider:\n<style>\n.box {\npadding: 25px 50px 75px 100px;\n}\n</style>\n<div class="box">Hello</div>\nWhat is the left padding?',
+          options: ["A. 25px", "B. 50px", "C. 75px", "D. 100px"],
+          correctAnswerIndex: 3,
+        },
+        {
+          id: 179,
+          question:
+            "179. What is the bottom margin here?\n.box {\nmargin: 10px 20px 30px 40px;\n}",
+          options: ["A. 10px", "B. 20px", "C. 30px", "D. 40px"],
+          correctAnswerIndex: 2,
+        },
+        {
+          id: 180,
+          question:
+            "180. What is the top padding?\n.box {\npadding: 5px 15px 25px 35px;\n}",
+          options: ["A. 5px", "B. 15px", "C. 25px", "D. 35px"],
+          correctAnswerIndex: 0,
+        },
+        {
+          id: 181,
+          question:
+            '181. Which elements have no bullets?\n<ul class="a">\n<li>One</li>\n<li>Two</li>\n</ul>\n<ul class="b" style="list-style-type: none">\n<li>Three</li>\n<li>Four</li>\n</ul>',
+          options: [
+            "A. One and Two",
+            "B. Three and Four",
+            "C. All four",
+            "D. None",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 182,
+          question:
+            '182. What does this link do?\n<a href="#chapter4">Go</a>\n<h2 id="chapter4">Chapter 4</h2>',
+          options: [
+            "A. Goes to another website",
+            "B. Scrolls/jumps to chapter4",
+            "C. Opens chapter4.html",
+            "D. Submits a form",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 188,
+          question: "188. PHP is primarily:",
+          options: [
+            "A. Client-side only",
+            "B. Server-side",
+            "C. CSS-based",
+            "D. Database-only",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 189,
+          question: "189. PHP code executes:",
+          options: [
+            "A. In the browser",
+            "B. On the web server",
+            "C. Inside CSS",
+            "D. Inside HTML tags only",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 190,
+          question: "190. PHP output is sent to the browser as:",
+          options: ["A. Raw PHP code", "B. HTML", "C. SQL", "D. CSS only"],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 191,
+          question: "191. PHP code begins with:",
+          options: [
+            "A. <php>",
+            "B. <?php",
+            "C. <? only according to the notes",
+            "D. <script php>",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 192,
+          question: "192. PHP statements generally end with:",
+          options: ["A. :", "B. .", "C. ;", "D. ,"],
+          correctAnswerIndex: 2,
+        },
+        {
+          id: 193,
+          question: "193. PHP files are normally saved using:",
+          options: ["A. .html", "B. .css", "C. .php", "D. .ph"],
+          correctAnswerIndex: 2,
+        },
+        {
+          id: 194,
+          question: "194. PHP variable names are:",
+          options: [
+            "A. Case-insensitive",
+            "B. Case-sensitive",
+            "C. Numeric only",
+            "D. Always uppercase",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 195,
+          question: "195. PHP function names are:",
+          options: [
+            "A. Case-sensitive",
+            "B. Not case-sensitive",
+            "C. Numeric only",
+            "D. Required to begin with \\$",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 196,
+          question: "196. A PHP variable begins with:",
+          options: ["A. #", "B. \\$", "C. @", "D. %"],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 197,
+          question: "197. Which is a valid PHP variable?",
+          options: ["A. name", "B. \\$name", "C. #name", "D. @name"],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 198,
+          question: "198. Which is NOT one of the listed PHP data types?",
+          options: ["A. String", "B. Integer", "C. Boolean", "D. CSS"],
+          correctAnswerIndex: 3,
+        },
+        {
+          id: 199,
+          question: "199. What does echo do?",
+          options: [
+            "A. Receives form input only",
+            "B. Outputs data",
+            "C. Creates a variable",
+            "D. Creates a cookie only",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 200,
+          question: "200. Can echo contain HTML tags?",
+          options: ["A. Yes", "B. No", "C. Only <div>", "D. Only <p>"],
+          correctAnswerIndex: 0,
+        },
+        {
+          id: 201,
+          question:
+            '201. Consider:\necho "Hello";\necho "World";\nWhat happens?',
+          options: [
+            "A. PHP error",
+            "B. Outputs Hello World",
+            "C. Outputs Hello World automatically",
+            "D. Outputs nothing",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 202,
+          question: "202. when echo prints a single string:",
+          options: [
+            "A. Parentheses are mandatory",
+            "B. Parentheses are optional",
+            "C. Parentheses are forbidden",
+            "D. Strings cannot be printed",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 203,
+          question: "203. For multiple strings with echo:",
+          options: [
+            "A. Parentheses must be used",
+            "B. Parentheses should not be used",
+            "C. Arrays are required",
+            "D. Strings must be concatenated with +",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 204,
+          question: "204. What is the output?\n<?php\n$x=5;\necho $x;\n?>",
+          options: ["A. $x", "B. 5", "C. x", "D. Error"],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 205,
+          question: '205. What is the output?\n<?php\n$x = 5;\necho "$x";\n?>',
+          options: ["A. $x", "B. 5", 'C. "5" including quotes', "D. Error"],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 206,
+          question: "206. What does a Boolean true print using echo?",
+          options: ["A. true", "B. 1", "C. TRUE", "D. Nothing"],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 207,
+          question: "207. What does a PHP null variable print?",
+          options: ["A. null", "B. 0", "C. Empty output", "D. NULL"],
+          correctAnswerIndex: 2,
+        },
+        {
+          id: 208,
+          question: "208. Which operator is used for string concatenation?",
+          options: ["A. +", "B. &", "C. .", "D. ::"],
+          correctAnswerIndex: 2,
+        },
+        {
+          id: 209,
+          question:
+            '209. What is the result?\n$txt2 = "WEB Lab";\necho "Study PHP at " . $txt2;',
+          options: [
+            "A. Study PHP at",
+            "B. WEB Lab",
+            "C. Study PHP at WEB Lab",
+            "D. Error",
+          ],
+          correctAnswerIndex: 2,
+        },
+        {
+          id: 210,
+          question: "210. Constants differ from variables because:",
+          options: [
+            "A. They always start with $",
+            "B. They cannot be changed or undefined after creation",
+            "C. They can only contain numbers",
+            "D. They exist only inside functions",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 211,
+          question: "211. Which function creates a constant?",
+          options: [
+            "A. constant()",
+            "B. make_constant()",
+            "C. define()",
+            "D. const_create()",
+          ],
+          correctAnswerIndex: 2,
+        },
+        {
+          id: 212,
+          question: "212. A valid constant name:",
+          options: [
+            "A. Must begin with $",
+            "B. Begins with a letter or underscore",
+            "C. Must begin with a number",
+            "D. Must contain @",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 213,
+          question:
+            "213. What is the default case-sensitivity setting of define()?",
+          options: ["A. True", "B. False", "C. Mixed", "D. Undefined"],
+          correctAnswerIndex: 0,
+        },
+        {
+          id: 214,
+          question:
+            '214. Consider:\ndefine("GREETING", "Welcome!");\necho GREETING;\nWhat is output?',
+          options: ["A. GREETING", "B. Welcome!", "C. $GREETING", "D. Error"],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 215,
+          question:
+            '215. Consider:\ndefine("GREETING", "Welcome!");\necho "GREETING";\nWhat is output?',
+          options: ["A. Welcome!", "B. GREETING", "C. Error", "D. Empty"],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 216,
+          question: "216. constants are:",
+          options: [
+            "A. Local only",
+            "B. Global",
+            "C. Function-only",
+            "D. Class-only",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 217,
+          question: "217. Which keyword declares a function?",
+          options: ["A. func", "B. function", "C. def", "D. method"],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 218,
+          question: "218. Which is a valid basic function?",
+          options: [
+            'A. function hello() {\necho "Hi";\n}',
+            'B. func hello() => "Hi";',
+            'C. def hello() {\necho "Hi";\n}',
+            "D. function_hello() {\n}",
+          ],
+          correctAnswerIndex: 0,
+        },
+        {
+          id: 219,
+          question:
+            '219. How is the function below called?\nfunction hello() {\necho "Hi";\n}',
+          options: [
+            "A. call hello();",
+            "B. hello();",
+            "C. run hello;",
+            "D. function.hello();",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 220,
+          question:
+            '220. Consider:\nfunction familyName($fname) {\necho "$fname Ayyash.";\n}\nfamilyName("Ahmad");\nfamilyName("Leen");\nWhat is the first line of output?',
+          options: [
+            "A. familyName Ayyash.",
+            "B. Ahmad Ayyash.",
+            "C. Leen Ayyash.",
+            "D. Ahmad",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 221,
+          question:
+            "221. Consider:\nfunction sum($x, $y) {\nreturn $x + $y;\n}\necho sum(5, 10);\nOutput:",
+          options: ["A. 5", "B. 10", "C. 15", "D. 5+10"],
+          correctAnswerIndex: 2,
+        },
+        {
+          id: 222,
+          question: "222. What does return do in the function?",
+          options: [
+            "A. Prints automatically",
+            "B. Sends a value back from the function",
+            "C. Deletes variables",
+            "D. Stops PHP completely",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 223,
+          question: "223. A variable declared inside a function normally has:",
+          options: [
+            "A. Global scope",
+            "B. Local scope",
+            "C. Server scope",
+            "D. Browser scope",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 224,
+          question: "224. A local variable can normally be accessed:",
+          options: [
+            "A. Anywhere",
+            "B. Only inside its function",
+            "C. Only in HTML",
+            "D. Only in CSS",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 225,
+          question: "225. A variable declared outside a function has:",
+          options: [
+            "A. Local scope",
+            "B. Global scope",
+            "C. Form scope",
+            "D. Browser scope",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 226,
+          question:
+            "226. How do you access a globally defined constant inside a PHP function?",
+          options: [
+            "A. You must use the global keyword before the constant name.",
+            "B. You must access it through the $GLOBALS array.",
+            "C. You can use it directly by its name without any keywords or symbols.",
+            "D. Constants cannot be used inside functions.",
+          ],
+          correctAnswerIndex: 2,
+        },
+        {
+          id: 227,
+          question:
+            "227. What special PHP array can be used to access global variables inside functions?",
+          options: [
+            "A. $GLOBALS",
+            "B. $_GLOBAL",
+            "C. $GLOBALVARS",
+            "D. $_SERVER",
+          ],
+          correctAnswerIndex: 0,
+        },
+        {
+          id: 228,
+          question:
+            "228. Consider:\n$x=5;\nfunction test() {\necho $x;\n}\ntest();\n$x inside the function is:",
+          options: [
+            "A. Automatically the global $x",
+            "B. Not directly available as the shown global variable",
+            "C. Always 5",
+            "D. Always 0",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 229,
+          question:
+            "229. Consider:\n$x=5;\n$y=10;\nfunction test() {\n$GLOBALS['y'] = $GLOBALS['x'] + $GLOBALS['y'];\n}\ntest();\necho $y;\nWhat is $y afterward?",
+          options: ["A. 5", "B. 10", "C. 15", "D. 0"],
+          correctAnswerIndex: 2,
+        },
+        {
+          id: 230,
+          question: "230. An indexed PHP array uses:",
+          options: [
+            "A. Named keys only",
+            "B. Numeric indexes",
+            "C. CSS classes",
+            "D. HTML IDs",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 231,
+          question: "231. The first automatically assigned numeric index is:",
+          options: ["A. 1", "B. 0", "C. -1", "D. 10"],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 232,
+          question: '232. What is:\n$cars = array("Volvo", "BMW", "Toyota");',
+          options: [
+            "A. A string",
+            "B. An indexed array",
+            "C. An associative array",
+            "D. A constant",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 233,
+          question: "233. What is $cars[0]?",
+          options: ["A. BMW", "B. Volvo", "C. Toyota", "D. Error"],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 234,
+          question: "234. What is $cars[2]?",
+          options: ["A. Volvo", "B. BMW", "C. Toyota", "D. 2"],
+          correctAnswerIndex: 2,
+        },
+        {
+          id: 235,
+          question:
+            "235. Which function returns the number of elements in an array?",
+          options: ["A. size()", "B. length()", "C. count()", "D. number()"],
+          correctAnswerIndex: 2,
+        },
+        {
+          id: 236,
+          question:
+            '236. What does this output?\n$cars = array("Volvo", "BMW", "Toyota");\necho count($cars);',
+          options: ["A. 0", "B. 2", "C. 3", "D. 4"],
+          correctAnswerIndex: 2,
+        },
+        {
+          id: 237,
+          question: "237. foreach ($age as $x) is useful for:",
+          options: [
+            "A. Sorting only",
+            "B. Iterating through array values",
+            "C. Creating constants",
+            "D. Reading cookies",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 238,
+          question: "238. An associative array uses:",
+          options: [
+            "A. Only numeric indexes",
+            "B. Named keys",
+            "C. Only IDs",
+            "D. HTML names",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 239,
+          question:
+            '239. Consider:\n$age = array(\n"Peter"=>"35",\n"Ben"=>"37",\n"Joe"=>"43"\n);\nWhat is $age[\'Ben\']?',
+          options: ["A. Peter", "B. 35", "C. 37", "D. Ben"],
+          correctAnswerIndex: 2,
+        },
+        {
+          id: 240,
+          question: "240. In an associative array:",
+          options: [
+            "A. The key must always be numeric",
+            "B. The key can be a string or number",
+            "C. The value must always be a string",
+            "D. Keys cannot be named",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 241,
+          question:
+            '241. Which syntax accesses the value associated with key "Peter"?',
+          options: [
+            "A. $age.Peter",
+            'B. $age["Peter"]',
+            "C. $age->Peter",
+            "D. $age(Peter)",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 242,
+          question: "242. Which function sorts an array in ascending order?",
+          options: [
+            "A. sort()",
+            "B. asort() only",
+            "C. rsort()",
+            "D. upsort()",
+          ],
+          correctAnswerIndex: 0,
+        },
+        {
+          id: 243,
+          question:
+            "243. Which function sorts an indexed array in descending order?",
+          options: [
+            "A. sort()",
+            "B. dsort()",
+            "C. rsort()",
+            "D. reverseSort()",
+          ],
+          correctAnswerIndex: 2,
+        },
+        {
+          id: 244,
+          question:
+            "244. Which sorts an associative array by VALUE in ascending order?",
+          options: ["A. asort()", "B. ksort()", "C. sort()", "D. vsort()"],
+          correctAnswerIndex: 0,
+        },
+        {
+          id: 245,
+          question:
+            "245. Which sorts an associative array by KEY in ascending order?",
+          options: ["A. asort()", "B. sort()", "C. ksort()", "D. keysort()"],
+          correctAnswerIndex: 2,
+        },
+        {
+          id: 246,
+          question:
+            "246. What is the result after:\n$numbers = array(4,6,2,22,11);\nsort($numbers);",
+          options: [
+            "A. 22, 11, 6, 4, 2",
+            "B. 2, 4, 6, 11, 22",
+            "C. 4, 6, 2, 22, 11",
+            "D. 11, 22, 6, 4, 2",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 247,
+          question: "247. Which superglobal collects POST form values?",
+          options: ["A. $_GET", "B. $_POST", "C. $_FORM", "D. $_DATA"],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 248,
+          question: "248. Which superglobal collects GET form values?",
+          options: [
+            "A. $_POST",
+            "B. $_SERVER",
+            "C. $_GET",
+            "D. $_REQUEST_METHOD",
+          ],
+          correctAnswerIndex: 2,
+        },
+        {
+          id: 249,
+          question: "249. Which can contain both GET and POST data?",
+          options: ["A. $_BOTH", "B. $_REQUEST", "C. $_DATA", "D. $_FORM"],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 250,
+          question: "250. Which superglobal tells you the request method?",
+          options: [
+            "A. $_REQUEST",
+            "B. $_SERVER['REQUEST_METHOD']",
+            "C. $_POST['METHOD']",
+            "D. $_METHOD",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 251,
+          question:
+            "251. Which superglobal contains the filename of the currently executing script?",
+          options: [
+            "A. $_SERVER['PHP_SELF']",
+            "B. $_SERVER['FILE']",
+            "C. $_PHP['SELF']",
+            "D. $_FILE['PHP']",
+          ],
+          correctAnswerIndex: 0,
+        },
+        {
+          id: 252,
+          question:
+            '252. Consider:\n<form method="post" action="one.php">\n<input type="text" name="uname">\n<input type="submit">\n</form>\nWhich PHP statement reads the field?',
+          options: [
+            "A. $_GET['uname']",
+            "B. $_POST['uname']",
+            "C. $_FORM['uname']",
+            "D. $_SERVER['uname']",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 253,
+          question: "253. The HTML input name becomes:",
+          options: [
+            "A. The key used in $_POST",
+            "B. The PHP variable name automatically",
+            "C. The filename",
+            "D. The table name",
+          ],
+          correctAnswerIndex: 0,
+        },
+        {
+          id: 254,
+          question:
+            "254. Which is safest among the options for checking whether a submitted field exists before accessing it?",
+          options: ["A. isset()", "B. exists()", "C. defined()", "D. check()"],
+          correctAnswerIndex: 0,
+        },
+        {
+          id: 255,
+          question: "255. isset($var) returns false when:",
+          options: [
+            "A. Variable exists and has value",
+            "B. Variable is NULL or not set",
+            "C. Variable is an integer",
+            "D. Variable is a string",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 256,
+          question: "256. A PHP cookie is stored primarily at the:",
+          options: [
+            "A. Server only",
+            "B. Client browser",
+            "C. Database only",
+            "D. PHP source file",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 257,
+          question: "257. A cookie is created:",
+          options: [
+            "A. At client side only",
+            "B. At server side and saved to the client browser",
+            "C. Inside CSS",
+            "D. Inside MySQL only",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 258,
+          question: "258. On later requests, a cookie is:",
+          options: [
+            "A. Never sent back",
+            "B. Embedded with the request",
+            "C. Converted into CSS",
+            "D. Deleted automatically",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 259,
+          question: "259. Which function sets a cookie?",
+          options: [
+            "A. cookie()",
+            "B. setcookie()",
+            "C. create_cookie()",
+            "D. makecookie()",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 260,
+          question: "260. Which is the general syntax shown?",
+          options: [
+            "A. setcookie(name, value, expire)",
+            "B. cookie(name, expire, value)",
+            "C. set_cookie(value, name)",
+            "D. makecookie(name)",
+          ],
+          correctAnswerIndex: 0,
+        },
+        {
+          id: 261,
+          question: "261. What does the expiration parameter represent?",
+          options: [
+            "A. File size",
+            "B. Future time when the browser should forget the cookie",
+            "C. Username",
+            "D. Password length",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 262,
+          question: "262. Which superglobal accesses cookies?",
+          options: [
+            "A. $_COOKIE",
+            "B. $_CLIENT",
+            "C. $_BROWSER",
+            "D. $_HTTP_COOKIE",
+          ],
+          correctAnswerIndex: 0,
+        },
+        {
+          id: 263,
+          question:
+            "263. Why might the first request fail to recognize a just-created cookie?",
+          options: [
+            "A. Cookies do not exist",
+            "B. The cookie has not yet been sent back on that first request",
+            "C. PHP cannot create cookies",
+            "D. Browsers do not support cookies",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 264,
+          question: "264. How do you delete a cookie?",
+          options: [
+            "A. deletecookie()",
+            "B. Set it with an already expired time",
+            "C. Set it to null only",
+            "D. Remove it from HTML",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 265,
+          question: "265. A PHP session is used to:",
+          options: [
+            "A. Store information across multiple pages",
+            "B. Style forms",
+            "C. Replace HTML",
+            "D. Upload images only",
+          ],
+          correctAnswerIndex: 0,
+        },
+        {
+          id: 266,
+          question: "266. Session information is NOT stored directly on:",
+          options: [
+            "A. The server",
+            "B. The user's computer in the same way as cookies",
+            "C. PHP memory",
+            "D. The application side",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 267,
+          question: "267. Which function starts a PHP session?",
+          options: [
+            "A. start_session()",
+            "B. session_start()",
+            "C. begin_session()",
+            "D. open_session()",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 268,
+          question: "268. Session variables are stored using:",
+          options: [
+            "A. $_SESSION",
+            "B. $_COOKIE",
+            "C. $_SESSION_DATA",
+            "D. $_SESSION",
+          ],
+          correctAnswerIndex: 3,
+        },
+        {
+          id: 269,
+          question: "269. session variables by default last until:",
+          options: [
+            "A. The page reloads",
+            "B. The browser is closed",
+            "C. PHP stops forever",
+            "D. The user logs in",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 270,
+          question:
+            "270. Consider:\nsession_start();\n$_SESSION['color'] = 'red';\nHow is the color stored?",
+          options: [
+            "A. As a cookie variable",
+            "B. As a session variable",
+            "C. As an HTML attribute",
+            "D. As a GET parameter",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 271,
+          question:
+            "271. To access session variables on another page, the page should:",
+          options: [
+            "A. Call session_start()",
+            "B. Call cookie_start()",
+            "C. Use GET",
+            "D. Recreate the values manually",
+          ],
+          correctAnswerIndex: 0,
+        },
+        {
+          id: 272,
+          question:
+            "272. Consider:\nsession_start();\nif (isset($_SESSION['views']))\n$_SESSION['views'] = $_SESSION['views'] + 1;\nelse\n$_SESSION['views'] = 1;\necho \"Views=\" . $_SESSION['views'];\nOn the first fresh request, output is:",
+          options: ["A. Views = 0", "B. Views = 1", "C. Views = 2", "D. Error"],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 273,
+          question: "273. On the next refresh, assuming the same session:",
+          options: ["A. Views = 1", "B. Views = 2", "C. Views = 0", "D. Error"],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 274,
+          question: "274. Which removes one session variable?",
+          options: [
+            "A. delete()",
+            "B. unset($_SESSION['shape'])",
+            "C. session_remove_all()",
+            "D. remove_session()",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 275,
+          question:
+            "275. Which removes all session variables but not the session itself?",
+          options: [
+            "A. session_unset()",
+            "B. session_destroy()",
+            "C. unset_all()",
+            "D. delete_session_vars()",
+          ],
+          correctAnswerIndex: 0,
+        },
+        {
+          id: 276,
+          question: "276. Which destroys the session variables/session?",
+          options: [
+            "A. session_delete()",
+            "B. session_unset()",
+            "C. session_destroy()",
+            "D. close_session()",
+          ],
+          correctAnswerIndex: 2,
+        },
+        {
+          id: 277,
+          question:
+            "277. Consider:\n$product = array('T-shirt', 'yellow', '44');\n$_SESSION['pro'] = $product;\nWhat is $_SESSION['pro'][2]?",
+          options: ["A. T-shirt", "B. yellow", "C. 44", "D. 2"],
+          correctAnswerIndex: 2,
+        },
+        {
+          id: 278,
+          question: "278. Which function connects PHP to MySQL?",
+          options: [
+            "A. mysql_connect()",
+            "B. mysqli_connect()",
+            "C. db_connect()",
+            "D. connect_mysql()",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 279,
+          question: "279. What does mysqli_query() do?",
+          options: [
+            "A. Creates a session",
+            "B. Executes the SQL query",
+            "C. Creates a cookie",
+            "D. Closes the database",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 280,
+          question:
+            "280. Which SQL query selects all columns from the user table?",
+          options: [
+            "A. DELETE FROM user",
+            "B. UPDATE user",
+            "C. SELECT * FROM user",
+            "D. INSERT INTO user",
+          ],
+          correctAnswerIndex: 2,
+        },
+        {
+          id: 281,
+          question: "281. Which function fetches a row from a result set?",
+          options: [
+            "A. mysqli_fetch_array()",
+            "B. mysqli_get_row()",
+            "C. fetch_sql()",
+            "D. row_array()",
+          ],
+          correctAnswerIndex: 0,
+        },
+        {
+          id: 282,
+          question: "282. mysqli_fetch_array($result) can provide row data as:",
+          options: [
+            "A. Associative and numeric indexes",
+            "B. Numeric only",
+            "C. String only",
+            "D. Boolean only",
+          ],
+          correctAnswerIndex: 0,
+        },
+        {
+          id: 283,
+          question:
+            "283. If a row contains ID and name, which could retrieve the ID numerically?",
+          options: ["A. $row[0]", "B. $row[id]", "C. $row->0", 'D. $row("id")'],
+          correctAnswerIndex: 0,
+        },
+        {
+          id: 284,
+          question: "284. Which could retrieve a field by associative key?",
+          options: [
+            'A. $row["name"]',
+            'B. $row->["name"]',
+            "C. $row(name)",
+            'D. $row["field":name]',
+          ],
+          correctAnswerIndex: 0,
+        },
+        {
+          id: 285,
+          question:
+            "285. Which function returns the number of rows in a result set?",
+          options: [
+            "A. mysqli_count()",
+            "B. mysqli_num_rows()",
+            "C. mysqli_rows()",
+            "D. count_rows_mysql()",
+          ],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 286,
+          question: "286. Which function closes the database connection?",
+          options: [
+            "A. mysqli_end()",
+            "B. mysqli_close()",
+            "C. mysql_finish()",
+            "D. db_close_all()",
+          ],
+          correctAnswerIndex: 1,
+        },
+      ];
+
+      const quizContent = document.getElementById("quiz-content");
+
+      quizData.forEach((q, qIndex) => {
+        // Create question block
+        const block = document.createElement("div");
+        block.className = "question-block";
+
+        // Add question text
+        const title = document.createElement("div");
+        title.className = "question-text";
+        title.innerText = q.question;
+        block.appendChild(title);
+
+        // Add options container
+        const optionsDiv = document.createElement("div");
+        optionsDiv.className = "options-container";
+
+        // Feedback text below options
+        const feedback = document.createElement("div");
+        feedback.className = "feedback";
+
+        // Generate buttons for choices
+        const buttons = [];
+        q.options.forEach((optText, optIndex) => {
+          const btn = document.createElement("button");
+          btn.className = "option-btn";
+          btn.innerText = optText;
+
+          btn.onclick = () => {
+            // Disable all buttons in this question once answered
+            buttons.forEach((b) => (b.disabled = true));
+
+            if (optIndex === q.correctAnswerIndex) {
+              btn.classList.add("correct");
+              feedback.style.color = "#28a745";
+              feedback.innerText = "Correct!";
+            } else {
+              btn.classList.add("wrong");
+              buttons[q.correctAnswerIndex].classList.add("correct"); // Reveal right answer
+              feedback.style.color = "#dc3545";
+              feedback.innerText =
+                "Incorrect. The right answer is highlighted.";
+            }
+            feedback.style.display = "block";
+          };
+
+          buttons.push(btn);
+          optionsDiv.appendChild(btn);
+        });
+
+        block.appendChild(optionsDiv);
+        block.appendChild(feedback);
+        quizContent.appendChild(block);
+      });
+    </script>
+  </body>
+</html>
